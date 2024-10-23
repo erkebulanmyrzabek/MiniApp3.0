@@ -20,6 +20,7 @@ from Course.models import Profile
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 
 def profile_view(request):
     # Получение всех профилей
@@ -27,15 +28,30 @@ def profile_view(request):
     return render(request, 'profile.html', {'profiles': profiles})
 
 def lessons_view(request):
-    username = Profile.objects.all()[0].username
-    coin = Profile.objects.all()[0].coin
-    return render(request, 'lessons.html', {'username': username, 'coin': coin})
+    # Получаем telegram_id из GET параметров
+    telegram_id = request.GET.get('telegram_id')
+
+    # Ищем пользователя по telegram_id
+    if telegram_id:
+        profile = get_object_or_404(Profile, telegram_id=telegram_id)
+        username = profile.username
+        coin = profile.coin
+        return render(request, 'lessons.html', {'username': username, 'coin': coin})
+    else:
+        return JsonResponse({'error': 'Telegram ID not provided'}, status=400)
 
 def lesson_view(request):
-    username = Profile.objects.all()
-    coin = Profile.objects.all()[0].coin
-    return render(request, 'lesson.html', {'username': username, 'coin': coin})
+    # Получаем telegram_id из GET параметров
+    telegram_id = request.GET.get('telegram_id')
 
+    # Ищем пользователя по telegram_id
+    if telegram_id:
+        profile = get_object_or_404(Profile, telegram_id=telegram_id)
+        username = profile.username
+        coin = profile.coin
+        return render(request, 'lesson.html', {'username': username, 'coin': coin})
+    else:
+        return JsonResponse({'error': 'Telegram ID not provided'}, status=400)
 
 @csrf_exempt  # Убираем CSRF проверку для упрощения
 def register_user(request):
