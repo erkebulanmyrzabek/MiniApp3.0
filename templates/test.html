@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тесты</title>
+    <!-- Загрузка тегов статики -->
+    {% load static %}
+    <!-- Подключение CSS -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+<!-- Включаем верхний navbar -->
+{% include 'navbar.html' %}
+
+<div class="container">
+    <div class="content">
+        <h1>Тесты</h1>
+        <p>Выберите тест, который хотите пройти:</p>
+
+        <div class="test-list">
+            <div class="test-item" onclick="startTest(1)">
+                <div class="test-title">Тест 1: Основы блокчейна</div>
+                <div class="test-description">Проверьте свои знания об основах блокчейна и криптовалют.</div>
+            </div>
+            <div class="test-item" onclick="startTest(2)">
+                <div class="test-title">Тест 2: Криптовалютные транзакции</div>
+                <div class="test-description">Оцените, насколько вы знакомы с транзакциями в криптовалютах.</div>
+            </div>
+            <!-- Другие тесты -->
+        </div>
+    </div>
+</div>
+
+<!-- Включаем нижнюю навигацию -->
+{% include 'bottom.html' %}
+
+<script>
+    function startTest(testId) {
+        alert('Тест ' + testId + ' выбран! Перенаправление на страницу теста...');
+    }
+
+
+</script>
+</body>
+</html>

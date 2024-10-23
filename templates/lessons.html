@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои уроки</title>
+    <!-- Загрузка тегов статики -->
+    {% load static %}
+    <!-- Подключение CSS -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+<!-- Включаем верхний navbar -->
+<div class="navbar">
+    <div class="user-info">
+        <span>{{ username }} </span>
+    </div>
+    <div class="coins">
+        <span>🪙 {{ coin }} </span> <!-- Отображаем коины из базы данных -->
+    </div>
+</div>
+<br />
+
+<style>
+    .navbar {
+        position: fixed; /* Закрепляет навбар в верхней части страницы */
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000; /* Увеличивает приоритет отображения над другими элементами */
+        background-color: #f8f9fa; /* Цвет фона */
+        padding: 15px; /* Внутренние отступы */
+        border-radius: 0 0 15px 15px; /* Закругляем только нижние углы */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень для навбара */
+        display: flex; /* Для выравнивания элементов */
+        justify-content: space-between; /* Элементы на разные стороны */
+        align-items: center; /* Вертикальное выравнивание элементов */
+        width: 90%; /* Ширина по всему экрану */
+    }
+
+    .user-info {
+        font-size: 16px; /* Размер шрифта */
+        color: #333; /* Цвет текста */
+    }
+
+    .coins {
+        font-size: 16px;
+        color: #333;
+    }
+
+    body {
+        padding-top: 70px; /* Отступ, чтобы контент не перекрывался навбаром */
+    }
+</style>
+
+
+
+
+<div class="container">
+    <div class="content">
+        <div class="welcome">
+            <h1>Сәлем, Erkebulan!👋</h1>
+            <p>Нажимаю кнопку ниже вы можете продолжить уроки там где остановились 😉</p>
+            <a href="/lesson/" class="button">Блокчейн и цифровые финансы</a>
+        </div>
+
+        <div class="topics">
+            <h2 class="topics-header">Темы</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-item-header" onclick="toggleAccordion(this)">
+                        <div class="topic-title">
+                            <span>Глава 1: Введение в блокчейн и основы криптовалют</span>
+                        </div>
+                        <span class="topic-check"></span>
+                    </div>
+                    <div class="accordion-item-body">
+                        <a href="lesson/" >
+                            <p>Лекция 1: Блокчейн и цифровые финансы</p>
+                        </a>
+                        <p>Лекция 2: Основы блокчейна и его структура</p>
+                        <p>Лекция 3: Создание криптокошельков и основы криптографии</p>
+                    </div>
+                </div>
+                <!-- Другие главы -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<br />
+<br />
+
+<!-- Включаем нижнюю навигацию -->
+{% include 'bottom.html' %}
+
+<script>
+    function toggleAccordion(element) {
+        const body = element.nextElementSibling;
+        const isVisible = body.style.display === 'block';
+        body.style.display = isVisible ? 'none' : 'block';
+    }
+</script>
+</body>
+</html>

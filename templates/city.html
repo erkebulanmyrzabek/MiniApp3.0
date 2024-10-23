@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Scrollable Image</title>
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 200%; /* Увеличиваем высоту страницы для скроллинга */
+}
+
+.fullscreen-image {
+    width: 100vw;
+    min-height: 200vh; /* Делаем контейнер очень высоким для скроллинга */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fullscreen-image img {
+    width: 100%; /* Изображение растягивается по ширине экрана */
+    height: auto; /* Высота адаптивная */
+    max-width: 100vw;
+    object-fit: cover;
+}
+
+/* Медиазапрос для экранов до 390px (iPhone 14) */
+@media only screen and (max-width: 390px) {
+    .fullscreen-image img {
+        width: 390px; /* Ширина фиксируется на 390px */
+        height: auto; /* Высота остается адаптивной */
+    }
+}
+
+    .tabs {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff; /* Цвет фона для вкладок */
+    display: flex;
+    justify-content: space-around; /* Распределение вкладок равномерно */
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Тень для вкладок */
+}
+
+.tab {
+    text-align: center;
+    flex: 1;
+    padding: 10px;
+}
+
+.tab img {
+    width: 24px;
+    height: 24px;
+}
+
+.active-tab {
+    background-color: #f0f0f0; /* Фон для активной вкладки */
+}
+
+/* Медиазапрос для маленьких экранов */
+@media only screen and (max-width: 390px) {
+    .tabs {
+        padding: 5px 0;
+    }
+    .tab img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+    </style>
+</head>
+{% include 'navbar.html' %}
+
+<body>
+    <div class="fullscreen-image">
+        <img src="/media/background2.png" alt="Image">
+    </div>
+</body>
+{% include 'bottom.html' %}
+</html>
+

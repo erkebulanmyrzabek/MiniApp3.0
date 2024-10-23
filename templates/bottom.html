@@ -1,0 +1,30 @@
+<div class="tabs">
+    <a href="/" class="tab" id="lessons-tab">
+        <img src="/media/book.png" alt="Мои уроки">
+        <span>Мои уроки</span>
+    </a>
+    <a href="/test/" class="tab" id="test-tab">
+        <img src="/media/notebook.png" alt="Тест">
+        <span>Тест</span>
+    </a>
+    <a href="/city/" class="tab" id="city-tab">
+        <img src="/media/office-building.png" alt="Мой город">
+        <span>Мой город</span>
+    </a>
+    <a href="/ai/" class="tab" id="ai-tab">
+        <img src="/media/microchip.png" alt="AI_zhan">
+        <span>AI_zhan</span>
+    </a>
+
+</div>
+
+<script>
+    const currentPath = window.location.pathname;
+    const tabs = document.querySelectorAll('.tab');
+
+    tabs.forEach(tab => {
+        if (tab.getAttribute('href') === currentPath) {
+            tab.classList.add('active-tab');
+        }
+    });
+</script>
