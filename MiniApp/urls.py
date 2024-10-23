@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from Course.models import Profile
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 def profile_view(request):
     # Получение всех профилей
@@ -34,11 +36,32 @@ def lesson_view(request):
     coin = Profile.objects.all()[0].coin
     return render(request, 'lesson.html', {'username': username, 'coin': coin})
 
+
+@csrf_exempt  # Убираем CSRF проверку для упрощения
+def register_user(request):
+    if request.method == 'POST':
+        telegram_id = request.POST.get('telegram_id')
+        username = request.POST.get('username')
+
+        if telegram_id and username:
+            # Проверка, есть ли пользователь с таким telegram_id
+            profile, created = Profile.objects.get_or_create(
+                telegram_id=telegram_id,
+                defaults={'username': username}
+            )
+            if created:
+                return JsonResponse({'status': 'success', 'message': 'User registered'})
+            else:
+                return JsonResponse({'status': 'success', 'message': 'User already exists'})
+        return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('profiles/', profile_view, name='profiles'),
     path('', lessons_view, name='lessons'),
     path('lesson/', lesson_view, name='lesson'),
+    path('register_user/', register_user, name='register_user'),
 ]
 
 
