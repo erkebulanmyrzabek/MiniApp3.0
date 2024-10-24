@@ -1,77 +1,77 @@
-<div class="tabs">
-    <a href="/static" class="tab" id="lessons-tab">
-        <img src="/templates/temp_files/book.png" alt="Мои уроки">
-        <span>Мои уроки</span>
-    </a>
-    <a href="/test/" class="tab" id="test-tab">
-        <img src="/templates/temp_files/notebook.png" alt="Тест">
-        <span>Тест</span>
-    </a>
-    <a href="/city/" class="tab" id="city-tab">
-        <img src="/templates/temp_files/office-building.png" alt="Мой город">
-        <span>Мой город</span>
-    </a>
-    <a href="/ai/" class="tab" id="ai-tab">
-        <img src="/templates/temp_files/microchip.png" alt="AI_zhan">
-        <span>AI_zhan</span>
-    </a>
-</div>
-<style>
-    .tabs {
-    display: flex;
-    justify-content: space-around;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #ffffff;
-    border-top: 1px solid #e0e0e0;
-    padding: 10px 0;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.tab {
-    text-align: center;
-    font-size: 14px;
-    color: #333;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.tab img {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 5px;
-}
-
-.active-tab {
-    color: #00AEEF;
-}
-
-</style>
-
-
-
-<script>
-        const params = new URLSearchParams(window.location.search);
-    const telegram_id = params.get('telegram_id');
-
-    if (telegram_id) {
-        const tabs = document.querySelectorAll('a');
-        tabs.forEach(tab => {
-            const url = new URL(tab.href);
-            url.searchParams.set('telegram_id', telegram_id);
-            tab.href = url.toString();
-        });
-    }
-
-    // Подсвечиваем активную вкладку
-    const currentPath = window.location.pathname;
-    tabs.forEach(tab => {
-        if (tab.getAttribute('href').startsWith(currentPath)) {
-            tab.classList.add('active-tab');
-        }
-    });
-</script>
+{#<div class="tabs">#}
+{#    <a href="/static" class="tab" id="lessons-tab">#}
+{#        <img src="/templates/temp_files/book.png" alt="Мои уроки">#}
+{#        <span>Мои уроки</span>#}
+{#    </a>#}
+{#    <a href="/test/" class="tab" id="test-tab">#}
+{#        <img src="/templates/temp_files/notebook.png" alt="Тест">#}
+{#        <span>Тест</span>#}
+{#    </a>#}
+{#    <a href="/city/" class="tab" id="city-tab">#}
+{#        <img src="/templates/temp_files/office-building.png" alt="Мой город">#}
+{#        <span>Мой город</span>#}
+{#    </a>#}
+{#    <a href="/ai/" class="tab" id="ai-tab">#}
+{#        <img src="/templates/temp_files/microchip.png" alt="AI_zhan">#}
+{#        <span>AI_zhan</span>#}
+{#    </a>#}
+{#</div>#}
+{#<style>#}
+{#    .tabs {#}
+{#    display: flex;#}
+{#    justify-content: space-around;#}
+{#    position: fixed;#}
+{#    bottom: 0;#}
+{#    left: 0;#}
+{#    right: 0;#}
+{#    background-color: #ffffff;#}
+{#    border-top: 1px solid #e0e0e0;#}
+{#    padding: 10px 0;#}
+{#    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);#}
+{#}#}
+{##}
+{#.tab {#}
+{#    text-align: center;#}
+{#    font-size: 14px;#}
+{#    color: #333;#}
+{#    text-decoration: none;#}
+{#    display: flex;#}
+{#    flex-direction: column;#}
+{#    align-items: center;#}
+{#}#}
+{##}
+{#.tab img {#}
+{#    width: 30px;#}
+{#    height: 30px;#}
+{#    margin-bottom: 5px;#}
+{#}#}
+{##}
+{#.active-tab {#}
+{#    color: #00AEEF;#}
+{#}#}
+{##}
+{#</style>#}
+{##}
+{##}
+{##}
+{#<script>#}
+{#        const params = new URLSearchParams(window.location.search);#}
+{#    const telegram_id = params.get('telegram_id');#}
+{##}
+{#    if (telegram_id) {#}
+{#        const tabs = document.querySelectorAll('a');#}
+{#        tabs.forEach(tab => {#}
+{#            const url = new URL(tab.href);#}
+{#            url.searchParams.set('telegram_id', telegram_id);#}
+{#            tab.href = url.toString();#}
+{#        });#}
+{#    }#}
+{##}
+{#    // Подсвечиваем активную вкладку#}
+{#    const currentPath = window.location.pathname;#}
+{#    tabs.forEach(tab => {#}
+{#        if (tab.getAttribute('href').startsWith(currentPath)) {#}
+{#            tab.classList.add('active-tab');#}
+{#        }#}
+{#    });#}
+{#</script>#}

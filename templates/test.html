@@ -1,4 +1,7 @@
-
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тесты</title>
     <!-- Подключение Bootstrap и Font Awesome -->
@@ -54,8 +57,8 @@
 <!-- Навбар -->
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
-        <div class="user-info">Сәлем, {{ username }}</div>
-        <div class="coins">🪙 {{ coin }}</div>
+        <div class="user-info">Сәлем, <span id="username">{{ username }}</span></div>
+        <div class="coins">🪙 <span id="coin">{{ coin }}</span></div>
     </div>
 </nav>
 
@@ -63,7 +66,25 @@
 <div class="container page-content">
     <h1>Тесты</h1>
     <p>Выберите тест и ответьте на вопросы, {{ username }}!</p>
-    <!-- Ваш контент для тестов -->
+
+    <!-- Пример теста -->
+    <form id="testForm">
+        <div class="mb-4">
+            <h4>1. Что такое блокчейн?</h4>
+            <input type="radio" name="q1" value="correct"> Децентрализованная база данных<br>
+            <input type="radio" name="q1" value="wrong"> Локальная сеть<br>
+            <input type="radio" name="q1" value="wrong"> Интернет-платформа<br>
+        </div>
+
+        <div class="mb-4">
+            <h4>2. Кто создал биткоин?</h4>
+            <input type="radio" name="q2" value="correct"> Сатоши Накамото<br>
+            <input type="radio" name="q2" value="wrong"> Илон Маск<br>
+            <input type="radio" name="q2" value="wrong"> Билл Гейтс<br>
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="submitTest()">Отправить</button>
+    </form>
 </div>
 
 <!-- Вкладки внизу -->
@@ -107,7 +128,6 @@
         return cookieValue;
     }
 
-
     // Получаем параметры из URL
     const params = new URLSearchParams(window.location.search);
     const username = params.get('username');
@@ -118,16 +138,10 @@
     document.getElementById('username').textContent = username;
     document.getElementById('coin').textContent = coin;
 
-    // Обновляем ссылку для кнопки назад
-    const backButton = document.getElementById('backButton');
-    backButton.href = `/?username=${username}&coin=${coin}&telegram_id=${telegram_id}`;
-
-
-
     // Функция для отправки теста и проверки правильных ответов
-    function submitTest(testId) {
+    function submitTest() {
         let correctAnswers = 0;
-        const form = document.getElementById(`test${testId}Form`);
+        const form = document.getElementById('testForm');
 
         // Проверяем ответы
         const answers = form.querySelectorAll('input[type="radio"]:checked');
@@ -148,8 +162,6 @@
 
     // Обновление коинов в базе данных
     function updateCoins(amount) {
-        const params = new URLSearchParams(window.location.search);
-        const telegram_id = params.get('telegram_id');
         const csrfToken = getCSRFToken();  // Получаем CSRF-токен
 
         if (telegram_id) {
@@ -176,7 +188,6 @@
         }
     }
 </script>
-
 
 </body>
 </html>

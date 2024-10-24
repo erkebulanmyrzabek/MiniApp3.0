@@ -24,14 +24,27 @@
             color: #007bff;
         }
 
-        .page-content {
-            padding: 20px;
-            background: url('background.png') no-repeat center center fixed;
+        /* Установка фоновой картинки */
+        body {
+            background: url('https://1ge.kz/iPhone%2016%20Pro%20-%201%20(5).png') no-repeat center top;
             background-size: cover;
-            color: white;
-            min-height: 80vh;
+            margin: 0;
+            padding: 0;
+            min-height: 200vh; /* Устанавливаем высоту, которая превышает экран для скроллинга */
+            position: relative;
         }
 
+        /* Абсолютное позиционирование для элементов поверх фонового изображения */
+        .overlay-image {
+            position: absolute;
+            top: 20%; /* Позиция сверху */
+            left: 50%; /* Центрируем относительно левого края */
+            transform: translateX(-50%); /* Центрируем по горизонтали */
+            width: 150px;
+            height: auto;
+        }
+
+        /* Вкладки внизу */
         .tabs-custom {
             position: fixed;
             bottom: 0;
@@ -53,10 +66,6 @@
             font-size: 24px;
             margin-bottom: 5px;
         }
-
-        .back-button {
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -64,28 +73,30 @@
 <!-- Навбар -->
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
-        <div class="user-info">Сәлем, {{ username }}</div>
-        <div class="coins">🪙 {{ coin }}</div>
+        <div class="user-info"> {{ username }} </div>
+        <div class="coins">🪙 <span id="coin">{{ coin }}</span></div>
     </div>
 </nav>
 
-<!-- Контент страницы -->
-<div class="container page-content">
-    <h1>Мой город</h1>
-    <p>Здесь вы можете узнать больше о вашем городе, {{ username }}!</p>
+<!-- Элемент поверх фонового изображения -->
+<img src="https://1ge.kz/box_img.png" id="buildingImage" class="overlay-image" alt="Overlay Image" style="cursor: pointer;">
 
-    <!-- Информация о городе -->
-    <div class="row">
-        <div class="col-md-12">
-            <p>Контент про город...</p>
+<!-- Модальное окно -->
+<div class="modal fade" id="buyBuildingModal" tabindex="-1" aria-labelledby="buyBuildingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="buyBuildingModalLabel">Покупка здания</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Купить здание за 200 коинов?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                <button type="button" class="btn btn-primary" id="confirmBuy">Да</button>
+            </div>
         </div>
-    </div>
-
-    <!-- Кнопка назад -->
-    <div class="back-button">
-        <a href="/?username={{ username }}&coin={{ coin }}&telegram_id={{ telegram_id }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Назад к урокам
-        </a>
     </div>
 </div>
 
@@ -112,5 +123,69 @@
 <!-- Подключение скриптов Bootstrap и Font Awesome -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+<script>
+    const buildingImage = document.getElementById('buildingImage');
+    const coinElement = document.getElementById('coin');
+    const modal = new bootstrap.Modal(document.getElementById('buyBuildingModal'));
+    let currentCoins = parseInt(coinElement.textContent);
+
+    // Открытие модального окна при клике на изображение здания
+    buildingImage.addEventListener('click', function() {
+        modal.show();
+    });
+
+    // Обработка покупки здания
+    document.getElementById('confirmBuy').addEventListener('click', function() {
+        if (currentCoins >= 200) {
+            // Удаляем 200 коинов
+            currentCoins -= 200;
+            coinElement.textContent = currentCoins;
+
+            // Меняем изображение здания на новое
+            buildingImage.src = 'https://1ge.kz/lms/koja.png'; // Замените на изображение в том же стиле
+
+            // Закрываем модальное окно
+            modal.hide();
+
+            // Отправляем обновленные данные на сервер для сохранения
+            fetch('/update_coins/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken() // Добавьте CSRF-токен, если требуется
+                },
+                body: JSON.stringify({
+                    telegram_id: '{{ telegram_id }}',
+                    coins: -200
+                })
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.status !== 'success') {
+                      alert('Ошибка при обновлении коинов.');
+                  }
+              }).catch(error => console.error('Ошибка:', error));
+        } else {
+            alert('Недостаточно коинов для покупки здания.');
+        }
+    });
+
+    // Получение CSRF токена из кукисов
+    function getCSRFToken() {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, 10) === 'csrftoken=') {
+                    cookieValue = decodeURIComponent(cookie.substring(10));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+
 </body>
 </html>
