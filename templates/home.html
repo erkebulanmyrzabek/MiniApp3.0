@@ -46,15 +46,36 @@
         .tabs-custom .tab {
             text-align: center;
             flex: 1;
+            transition: background-color 0.3s ease;
         }
 
         .tabs-custom .tab i {
             font-size: 24px;
             margin-bottom: 5px;
+            transition: color 0.3s ease;
         }
 
+        /* Стиль для активного таба */
         .active-tab {
             background-color: #007bff;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .tab.active-tab i {
+            color: white;
+        }
+
+        /* Эффект наведения на таб */
+        .tab:hover {
+            background-color: #0056b3;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .tab:hover i {
             color: white;
         }
 
@@ -64,7 +85,7 @@
 
         /* Стили для фона страницы "Мой город" */
         #city-page {
-            background: url('/media/background.png') no-repeat center center fixed;
+            background: url('background.png') no-repeat center center fixed;
             background-size: cover;
             color: white;
         }
@@ -120,18 +141,6 @@
         </div>
     </div>
 
-    <div id="test-page" class="page-content" style="display: none;">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Тесты</h1>
-                <p>Выберите тест, который хотите пройти:</p>
-                <div class="list-group">
-                    <button class="list-group-item list-group-item-action" onclick="startTest(1)">Тест 1: Основы блокчейна</button>
-                    <button class="list-group-item list-group-item-action" onclick="startTest(2)">Тест 2: Криптовалютные транзакции</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Страница с фоновым изображением -->
     <div id="city-page" class="page-content" style="display: none;">
@@ -172,15 +181,15 @@
 
 <!-- Вкладки -->
 <div class="tabs-custom">
-    <a href="#lessons" class="tab" onclick="switchPage('lessons-page')">
+    <a href="#" class="tab" onclick="switchPage('lessons-page')">
         <i class="fas fa-book"></i>
         <span>Мои уроки</span>
     </a>
-    <a href="#test" class="tab" onclick="switchPage('test-page')">
+    <a href="/test/?username={{ username }}&coin={{ coin }}" class="tab" onclick="switchPage('test-page')">
         <i class="fas fa-pencil-alt"></i>
         <span>Тест</span>
     </a>
-    <a href="#city" class="tab" onclick="switchPage('city-page')">
+    <a href="/city/?username={{ username }}&coin={{ coin }}" class="tab" onclick="switchPage('city-page')">
         <i class="fas fa-city"></i>
         <span>Мой город</span>
     </a>
@@ -195,12 +204,31 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 <script>
     function switchPage(pageId) {
-        const pages = document.querySelectorAll('.page-content');
-        pages.forEach(page => {
-            page.style.display = 'none'; // Скрываем все страницы
-        });
-        document.getElementById(pageId).style.display = 'block'; // Показываем выбранную страницу
+    const pages = document.querySelectorAll('.page-content');
+    const tabs = document.querySelectorAll('.tab');
+
+    // Скрываем все страницы
+    pages.forEach(page => {
+        page.style.display = 'none';
+    });
+    // Показываем выбранную страницу
+    document.getElementById(pageId).style.display = 'block';
+
+    // Удаляем класс active-tab у всех вкладок
+    tabs.forEach(tab => {
+        tab.classList.remove('active-tab');
+    });
+
+    // Добавляем класс active-tab к текущей вкладке
+    const currentTab = document.querySelector(`a[href="#${pageId.replace('-page', '')}"]`);
+    currentTab.classList.add('active-tab');
     }
+
+    // Переключаем на страницу при загрузке
+    window.addEventListener('load', () => {
+        const currentPath = window.location.hash || '#lessons';
+        switchPage(currentPath.substring(1) + '-page');
+    });
 
     // Подсвечиваем активную вкладку
     const currentPath = window.location.hash || '#lessons';
@@ -211,14 +239,6 @@
         }
     });
 
-    // Переключаем на страницу при загрузке
-    window.addEventListener('load', () => {
-        switchPage(currentPath.substring(1) + '-page');
-    });
-
-    function startTest(testId) {
-        alert('Тест ' + testId + ' выбран! Перенаправление на страницу теста...');
-    }
 
     const params = new URLSearchParams(window.location.search);
     const telegram_id = params.get('telegram_id');

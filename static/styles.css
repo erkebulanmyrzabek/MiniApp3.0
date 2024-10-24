@@ -148,7 +148,7 @@ body {
 
 /* Стили для раздела города */
 .city-background {
-    background: url('/media/background2.png') no-repeat center center;
+    background: url('/templates/temp_files/background2.png') no-repeat center center;
     background-size: cover;
     height: 300px;
     border-radius: 10px;
