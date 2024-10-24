@@ -72,12 +72,36 @@ def register_user(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
+
+def city_view(request):
+    telegram_id = request.GET.get('telegram_id')
+
+    # Ищем пользователя по telegram_id
+    if telegram_id:
+        profile = get_object_or_404(Profile, telegram_id=telegram_id)
+        username = profile.username
+        coin = profile.coin
+        return render(request, 'city.html', {'username': username, 'coin': coin})
+    else:
+        return JsonResponse({'error': 'Telegram ID not provided'}, status=400)
+
+def test_view(request):
+    telegram_id = request.GET.get('telegram_id')
+    if telegram_id:
+        profile = get_object_or_404(Profile, telegram_id=telegram_id)
+        username = profile.username
+        coin = profile.coin
+        return render(request, 'test.html', {'username': username, 'coin': coin})
+    else:
+        return JsonResponse({'error': 'Telegram ID not provided'}, status=400)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('profiles/', profile_view, name='profiles'),
     path('', lessons_view, name='lessons'),
     path('lesson/', lesson_view, name='lesson'),
     path('register_user/', register_user, name='register_user'),
+    path('city/', city_view, name='city'),
+    path('test/', test_view, name='test'),
 ]
 
 
