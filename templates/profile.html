@@ -4,3 +4,16 @@
     <li>{{ profile.username }} - Coins: {{ profile.coin }}</li>
   {% endfor %}
 </ul>
+<script>
+        const params = new URLSearchParams(window.location.search);
+    const telegram_id = params.get('telegram_id');
+
+    if (telegram_id) {
+        const tabs = document.querySelectorAll('a');
+        tabs.forEach(tab => {
+            const url = new URL(tab.href);
+            url.searchParams.set('telegram_id', telegram_id);
+            tab.href = url.toString();
+        });
+    }
+</script>

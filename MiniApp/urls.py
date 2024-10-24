@@ -21,12 +21,12 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-
+@csrf_exempt
 def profile_view(request):
     # Получение всех профилей
     profiles = Profile.objects.all()
     return render(request, 'profile.html', {'profiles': profiles})
-
+@csrf_exempt
 def lessons_view(request):
     # Получаем telegram_id из GET параметров
     telegram_id = request.GET.get('telegram_id')
@@ -39,7 +39,7 @@ def lessons_view(request):
         return render(request, 'lessons.html', {'username': username, 'coin': coin})
     else:
         return JsonResponse({'error': 'Telegram ID not provided'}, status=400)
-
+@csrf_exempt
 def lesson_view(request):
     # Получаем telegram_id из GET параметров
     telegram_id = request.GET.get('telegram_id')
@@ -72,7 +72,7 @@ def register_user(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
-
+@csrf_exempt
 def city_view(request):
     telegram_id = request.GET.get('telegram_id')
 
@@ -84,7 +84,7 @@ def city_view(request):
         return render(request, 'city.html', {'username': username, 'coin': coin})
     else:
         return JsonResponse({'error': 'Telegram ID not provided'}, status=400)
-
+@csrf_exempt
 def test_view(request):
     telegram_id = request.GET.get('telegram_id')
     if telegram_id:
