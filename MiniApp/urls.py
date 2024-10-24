@@ -21,6 +21,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.conf import settings
 @csrf_exempt
 def profile_view(request):
     # Получение всех профилей
@@ -94,14 +95,30 @@ def test_view(request):
         return render(request, 'test.html', {'username': username, 'coin': coin})
     else:
         return JsonResponse({'error': 'Telegram ID not provided'}, status=400)
+
+
+def home_view(request):
+    telegram_id = request.GET.get('telegram_id')
+
+    # Ищем пользователя по telegram_id
+    if telegram_id:
+        profile = get_object_or_404(Profile, telegram_id=telegram_id)
+        username = profile.username
+        coin = profile.coin
+
+        # Передаем данные в шаблон
+        return render(request, 'home.html', {'username': username, 'coin': coin})
+    else:
+        return render(request, 'error.html', {'error': 'Telegram ID not provided'})
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('profiles/', profile_view, name='profiles'),
-    path('', lessons_view, name='lessons'),
+    path('lessons/', lessons_view, name='lessons'),
     path('lesson/', lesson_view, name='lesson'),
     path('register_user/', register_user, name='register_user'),
     path('city/', city_view, name='city'),
     path('test/', test_view, name='test'),
+    path('', home_view, name='home'),
 ]
 
 
