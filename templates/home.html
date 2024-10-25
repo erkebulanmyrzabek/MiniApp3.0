@@ -107,7 +107,7 @@
 <!-- Навбар -->
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container">
-        <div class="user-info">Сәлем, {{ username }}</div>
+        <div class="user-info">{{ username }}</div>
         <div class="coins">🪙 {{ coin }}</div>
     </div>
 </nav>
@@ -118,7 +118,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Сәлем, {{ username }} 👋</h1>
-                <p>Нажмите на кнопку ниже, чтобы продолжить уроки там, где остановились.</p>
+                <p>Начните где вы остановились</p>
                 <a href="lesson/" class="btn btn-primary">Блокчейн и цифровые финансы</a>
                 <h2 class="mt-4">Темы</h2>
                 <div class="accordion" id="accordionExample">
@@ -176,7 +176,7 @@
         <i class="fas fa-city"></i>
         <span>Мой город</span>
     </a>
-    <a href="#ai" class="tab" onclick="switchPage('ai-page')">
+    <a href="/ask_ai/?username={{ username }}&coin={{ coin }}&telegram_id={{ telegram_id }}" class="tab" onclick="switchPage('ai-page')">
         <i class="fas fa-microchip"></i>
         <span>AI_zhan</span>
     </a>

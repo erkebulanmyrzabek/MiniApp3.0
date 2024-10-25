@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = ['https://7228-2a0d-b201-a011-7be5-3877-ddf-41b5-308e.ngrok-free.app/']
+
 
 # Application definition
 
@@ -129,4 +131,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-TOKEN = '7945893753:AAH6oYEKPh8Z-TnxD_dw5Ifb5_QMRole0pE'
+TOKEN = '7792086921:AAGBBWUYsqyiFsHftoiK5N-oVFJn0_Aay1o'

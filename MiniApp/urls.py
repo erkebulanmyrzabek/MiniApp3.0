@@ -1,20 +1,5 @@
-"""
-URL configuration for MiniApp project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
+from django.contrib.sites import requests
 from django.urls import path
 from Course.models import Profile
 from django.shortcuts import render
@@ -102,20 +87,17 @@ def home_view(request):
         username = profile.username
         coin = profile.coin
 
-        # Передаем данные в шаблон
         return render(request, 'home.html', {'username': username, 'coin': coin})
     else:
         return render(request, 'error.html', {'error': 'Telegram ID not provided'})
 
 
 def test_view(request):
-    # Получаем username и coin из запроса (или профиля)
     telegram_id = request.GET.get('telegram_id')
     if telegram_id:
         profile = get_object_or_404(Profile, telegram_id=telegram_id)
         username = profile.username
         coin = profile.coin
-    # Передаем данные в шаблон
         return render(request, 'test.html', {'username': username, 'coin': coin, 'profile' : profile, 'telegram_id' : telegram_id})
     else:
         return render(request, 'error.html')
@@ -130,7 +112,7 @@ def update_coins(request):
 
             if telegram_id and coins_to_add:
                 profile = Profile.objects.get(telegram_id=telegram_id)
-                profile.coin += coins_to_add  # Добавляем количество коинов
+                profile.coin += coins_to_add
                 profile.save()
 
                 return JsonResponse({'status': 'success', 'new_balance': profile.coin})
@@ -184,7 +166,68 @@ def buy_building(request):
 
         return JsonResponse({'status': 'error', 'message': 'Building already purchased or invalid request'})
 
-def ai_view(request):
+chatgpt_api_key = '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'
+chatgpt_url = "https://api.openai.com/v1/chat/completions"
+
+from django.shortcuts import render
+
+def ai_chat_view(request):
+    # Получаем параметры из запроса (например, имя пользователя и количество коинов)
+    username = request.GET.get('username', 'User')
+    coin = request.GET.get('coin', 0)
+    telegram_id = request.GET.get('telegram_id', '')
+
+    # Передаем данные в шаблон
+    return render(request, 'ai.html', {
+        'username': username,
+        'coin': coin,
+        'telegram_id': telegram_id,
+    })
+
+# @csrf_exempt
+# def send_message(request):
+#     logger.info(f"Received request method: {request.method}")  # Log request method
+#
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             logger.info(f"Received data: {data}")  # Log received data
+#
+#             user_message = data.get('message')
+#
+#             if not user_message:
+#                 return JsonResponse({'error': 'Message not provided'}, status=400)
+#
+#             # ChatGPT API interaction code here...
+#             chatgpt_params = {
+#                 "model": "gpt-4o-2024-05-13",
+#                 "messages": [
+#                     {"role": "system", "content": "You are a helpful assistant named AI_Zhan. Respond in Kazakh."},
+#                     {"role": "user", "content": user_message}
+#                 ]
+#             }
+#
+#             chatgpt_headers = {
+#                 "Authorization": f"Bearer {chatgpt_api_key}",
+#                 "Content-Type": "application/json"
+#             }
+#
+#             chatgpt_response = requests.post(chatgpt_url, headers=chatgpt_headers, json=chatgpt_params)
+#             chatgpt_response.raise_for_status()
+#
+#             chatgpt_result = chatgpt_response.json()
+#             bot_response = chatgpt_result['choices'][0]['message']['content']
+#
+#             return JsonResponse({'response': bot_response})
+#
+#         except requests.exceptions.RequestException as e:
+#             logger.error(f"Request to ChatGPT failed: {e}")  # Log error
+#             return JsonResponse({'error': f"Request failed: {e}"}, status=500)
+#     else:
+#         logger.warning("Invalid request method")  # Log invalid request method
+#         return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
    #path('profiles/', profile_view, name='profiles'),
@@ -198,7 +241,7 @@ urlpatterns = [
     path('update_coins/', update_coins, name='update_coins'),
     path('city/', city_view, name='city'),
     path('buy_building/', buy_building, name='buy_building'),
-    path('ai/', ai_view, name='ai')
+    path('ask_ai/', ai_chat_view, name='ask_ai'),
 ]
 
 
