@@ -37,10 +37,19 @@
         /* Абсолютное позиционирование для элементов поверх фонового изображения */
         .overlay-image {
             position: absolute;
-            top: 20%; /* Позиция сверху */
-            left: 50%; /* Центрируем относительно левого края */
-            transform: translateX(-50%); /* Центрируем по горизонтали */
-            width: 150px;
+            top: 17%; /* Позиция сверху */
+            left: 60%; /* Сдвиг изображения вправо (было 50%) */
+            transform: translateX(-50%);
+            width: 200px;
+            height: auto;
+        }
+
+        .overlay-image-2 {
+            position: absolute;
+            top: 33%; /* Позиция для второго изображения */
+            left: 53%;
+            transform: translateX(-50%);
+            width: 200px;
             height: auto;
         }
 
@@ -80,13 +89,14 @@
 
 <!-- Элемент поверх фонового изображения -->
 <img src="https://1ge.kz/box_img.png" id="buildingImage" class="overlay-image" alt="Overlay Image" style="cursor: pointer;">
+<img src="https://1ge.kz/box_img.png" id="buildingImage2" class="overlay-image-2" alt="Overlay Image 2" style="cursor: pointer;">
 
-<!-- Модальное окно -->
+<!-- Модальное окно для первого здания -->
 <div class="modal fade" id="buyBuildingModal" tabindex="-1" aria-labelledby="buyBuildingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="buyBuildingModalLabel">Покупка здания</h5>
+                <h5 class="modal-title" id="buyBuildingModalLabel">Покупка первого здания</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -95,6 +105,25 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
                 <button type="button" class="btn btn-primary" id="confirmBuy">Да</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для второго здания -->
+<div class="modal fade" id="buyBuildingModal2" tabindex="-1" aria-labelledby="buyBuildingModal2Label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="buyBuildingModal2Label">Покупка второго здания</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Купить здание за 400 коинов?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                <button type="button" class="btn btn-primary" id="confirmBuy2">Да</button>
             </div>
         </div>
     </div>
@@ -126,24 +155,31 @@
 
 <script>
     const buildingImage = document.getElementById('buildingImage');
+    const buildingImage2 = document.getElementById('buildingImage2');
     const coinElement = document.getElementById('coin');
     const modal = new bootstrap.Modal(document.getElementById('buyBuildingModal'));
+    const modal2 = new bootstrap.Modal(document.getElementById('buyBuildingModal2'));
     let currentCoins = parseInt(coinElement.textContent);
 
-    // Открытие модального окна при клике на изображение здания
+    // Открытие модального окна при клике на первое изображение
     buildingImage.addEventListener('click', function() {
         modal.show();
     });
 
-    // Обработка покупки здания
+    // Открытие модального окна при клике на второе изображение
+    buildingImage2.addEventListener('click', function() {
+        modal2.show();
+    });
+
+    // Обработка покупки первого здания
     document.getElementById('confirmBuy').addEventListener('click', function() {
         if (currentCoins >= 200) {
             // Удаляем 200 коинов
             currentCoins -= 200;
             coinElement.textContent = currentCoins;
 
-            // Меняем изображение здания на новое
-            buildingImage.src = 'https://1ge.kz/lms/koja.png'; // Замените на изображение в том же стиле
+            // Меняем изображение первого здания на новое
+            buildingImage.src = 'https://1ge.kz/lms/koja.png';
 
             // Закрываем модальное окно
             modal.hide();
@@ -161,9 +197,38 @@
                 })
             }).then(response => response.json())
               .then(data => {
-                  if (data.status !== 'success') {
-                      alert('Ошибка при обновлении коинов.');
-                  }
+              }).catch(error => console.error('Ошибка:', error));
+        } else {
+            alert('Недостаточно коинов для покупки здания.');
+        }
+    });
+
+    // Обработка покупки второго здания
+    document.getElementById('confirmBuy2').addEventListener('click', function() {
+        if (currentCoins >= 400) {
+            // Удаляем 400 коинов
+            currentCoins -= 400;
+            coinElement.textContent = currentCoins;
+
+            // Меняем изображение второго здания на новое
+            buildingImage2.src = 'https://1ge.kz/lms/khan.png';
+
+            // Закрываем модальное окно
+            modal2.hide();
+
+            // Отправляем обновленные данные на сервер для сохранения
+            fetch('/update_coins/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken() // Добавьте CSRF-токен, если требуется
+                },
+                body: JSON.stringify({
+                    telegram_id: '{{ telegram_id }}',
+                    coins: -400
+                })
+            }).then(response => response.json())
+              .then(data => {
               }).catch(error => console.error('Ошибка:', error));
         } else {
             alert('Недостаточно коинов для покупки здания.');
@@ -175,7 +240,7 @@
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
-            for (let i = 0; cookies.length; i++) {
+            for (let i = 0; i < cookies.length; i++) {
                 const cookie = cookies[i].trim();
                 if (cookie.substring(0, 10) === 'csrftoken=') {
                     cookieValue = decodeURIComponent(cookie.substring(10));
