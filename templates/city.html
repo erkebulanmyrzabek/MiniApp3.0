@@ -75,6 +75,109 @@
             font-size: 24px;
             margin-bottom: 5px;
         }
+
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            overflow-y: auto;
+            width: 300px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .message.user {
+            background-color: #007bff;
+            color: white;
+            align-self: flex-end;
+        }
+
+        .message.ai {
+            background-color: #e9ecef;
+            color: black;
+            align-self: flex-start;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ddd;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .input-container button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Вкладки внизу */
+        .tabs-custom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #e0e0e0;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs-custom .tab {
+            text-align: center;
+            flex: 1;
+            transition: background-color 0.3s ease;
+        }
+
+        .tabs-custom .tab i {
+            font-size: 24px;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+
+        /* Эффект наведения на таб */
+        .tab:hover {
+            background-color: #0056b3;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .tab:hover i {
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -145,7 +248,7 @@
     </a>
     <a href="/ask_ai/?username={{ username }}&coin={{ coin }}&telegram_id={{ telegram_id }}" class="tab active-tab">
         <i class="fas fa-microchip"></i>
-        <span>AI_zhan</span>
+        <span>AIDOS</span>
     </a>
 </div>
 

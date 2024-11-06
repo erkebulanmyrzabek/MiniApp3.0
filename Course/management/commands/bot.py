@@ -29,7 +29,7 @@ class Command(BaseCommand):
             else:
                 await message.answer("Ты уже зарегистрирован!")
 
-            web_app_url = f"https://7228-2a0d-b201-a011-7be5-3877-ddf-41b5-308e.ngrok-free.app/?telegram_id={telegram_id}"
+            web_app_url = f"https://25cf-2a0d-b201-a001-d033-bda6-630a-81ec-b4e5.ngrok-free.app/?telegram_id={telegram_id}"
             markup = InlineKeyboardMarkup()
             button = InlineKeyboardButton(text="Открыть мини-приложение", web_app=WebAppInfo(url=web_app_url))
             markup.add(button)

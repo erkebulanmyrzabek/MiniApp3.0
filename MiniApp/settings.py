@@ -124,6 +124,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CSRF_TRUSTED_ORIGINS = ['https://9c2c-2a0d-b201-a011-6ed3-6da1-e50c-f51d-ac85.ngrok-free.app/','https://127.0.0.1:8000']
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
